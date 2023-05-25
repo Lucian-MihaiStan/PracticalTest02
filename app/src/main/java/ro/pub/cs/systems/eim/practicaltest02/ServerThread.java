@@ -12,6 +12,8 @@ public class ServerThread extends Thread {
 
     private ServerSocket serverSocket = null;
 
+    private long lastUpdate = null;
+
     private final Map<String, String> data = new HashMap<>();
 
     public ServerThread(int port) {
@@ -68,5 +70,11 @@ public class ServerThread extends Thread {
 
     public void setData(String valute, String valueInformation) {
         this.data.put(valute, valueInformation);
+        lastUpdate = System.currentTimeMillis();
+        Log.d(Constants.TAG, "Last update: " + lastUpdate);
+    }
+
+    public long getLastUpdate() {
+        return lastUpdate;
     }
 }

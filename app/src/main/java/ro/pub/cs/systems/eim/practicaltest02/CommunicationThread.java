@@ -62,9 +62,9 @@ public class CommunicationThread extends Thread {
             // It checks whether the serverThread has already received the weather forecast information for the given pokemon.
             Map<String, String> data = serverThread.getData();
             String valueInformation;
-            if (data.containsKey(valute)) {
+            if (data.containsKey(valute.toUpperCase()) && (System.currentTimeMillis() - serverThread.getLastUpdate()) / 1000 < Constants.WEB_SERVICE_UPDATE_TIME) {
                 Log.i(Constants.TAG, "[COMMUNICATION THREAD] Getting the information from the cache...");
-                valueInformation = data.get(valute);
+                valueInformation = data.get(valute.toUpperCase());
             } else {
                 Log.i(Constants.TAG, "[COMMUNICATION THREAD] Getting the information from the webservice...");
                 HttpClient httpClient = new DefaultHttpClient();
@@ -88,6 +88,7 @@ public class CommunicationThread extends Thread {
                 valueInformation = content.getJSONObject("bpi").getJSONObject(valute.toUpperCase()).getString("rate_float");
                 // Create a WeatherForecastInformation object with the information extracted from the JSONObject
                 serverThread.setData(valute, valueInformation);
+
             }
 
             if (valueInformation == null) {
